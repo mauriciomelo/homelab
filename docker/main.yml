@@ -8,6 +8,7 @@ services:
       - /dev/net/tun:/dev/net/tun # Required for tailscale to work
     environment:
       - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
     cap_add: # Required for tailscale to work
       - net_admin
       - sys_module
