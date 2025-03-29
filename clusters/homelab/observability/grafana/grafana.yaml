@@ -18,6 +18,14 @@ metadata:
   name: grafana-datasources
   namespace: observability
 data:
+  prometheus-datasource.yaml: |-
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus.observability.svc.cluster.local:9090
+
   loki-datasource.yaml: |-
     apiVersion: 1
     datasources:
