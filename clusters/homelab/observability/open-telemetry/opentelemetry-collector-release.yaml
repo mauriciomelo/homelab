@@ -19,3 +19,19 @@ spec:
     presets:
       logsCollection:
         enabled: true
+      kubernetesAttributes:
+        enabled: true
+    config:
+      exporters:
+        loki:
+          endpoint: "http://loki.observability.svc.cluster.local:3100/loki/api/v1/push"
+      service:
+        pipelines:
+          logs:
+            exporters:
+              - loki
+            processors:
+              - memory_limiter
+              - batch
+            receivers:
+              - otlp
