@@ -54,8 +54,15 @@ spec:
       replicas: 0
     read:
       replicas: 0
+      resources:
+        limits:
     write:
       replicas: 0
+      resources:
+        limits:
+    chunksCache:
+      # -- Amount of memory allocated to chunks-cache for object storage (in MB).
+      allocatedMemory: 150
 
     ingester:
       replicas: 0
