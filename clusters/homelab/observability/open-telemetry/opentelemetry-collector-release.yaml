@@ -23,13 +23,13 @@ spec:
         enabled: true
     config:
       exporters:
-        loki:
-          endpoint: "http://loki.observability.svc.cluster.local:3100/loki/api/v1/push"
+        otlphttp:
+          endpoint: "http://loki.observability.svc.cluster.local:3100/otlp"
       service:
         pipelines:
           logs:
             exporters:
-              - loki
+              - otlphttp
             processors:
               - memory_limiter
               - batch
