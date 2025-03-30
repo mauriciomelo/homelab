@@ -12,3 +12,11 @@ data:
       - job_name: 'prometheus'
         static_configs:
           - targets: ['localhost:9090']
+      - job_name: 'opentelemetry-collector'
+        scrape_interval: 15s
+        static_configs:
+          - targets: ['opentelemetry-collector.observability.svc.cluster.local:8889']
+        metric_relabel_configs:
+          - source_labels: [__name__]
+            regex: 'otel_scope_.*'
+            action: drop

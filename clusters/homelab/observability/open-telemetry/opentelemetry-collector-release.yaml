@@ -21,10 +21,18 @@ spec:
         enabled: true
       kubernetesAttributes:
         enabled: true
+      kubeletMetrics:
+        enabled: true
+      hostMetrics:
+        enabled: true
     config:
       exporters:
         otlphttp:
           endpoint: "http://loki.observability.svc.cluster.local:3100/otlp"
+        prometheus:
+          endpoint: "0.0.0.0:8889"
+          resource_to_telemetry_conversion:
+            enabled: true
       service:
         pipelines:
           logs:
@@ -35,3 +43,17 @@ spec:
               - batch
             receivers:
               - otlp
+          metrics:
+            # receivers: [kubeletstats]  # Already enabled via kubeletMetrics preset
+            # processors: [batch, memory_limiter]
+            exporters: [prometheus]
+    ports:
+      prometheus:
+        enabled: true
+        containerPort: 8889
+        servicePort: 8889
+        hostPort: 8889
+        protocol: TCP
+    service:
+      enabled: true
+      type: ClusterIP
