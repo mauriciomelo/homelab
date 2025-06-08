@@ -12,14 +12,14 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: podinfo
+      app: podinfo2
   template:
     metadata:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9797"
       labels:
-        app: podinfo
+        app: podinfo2
     spec:
       containers:
         - name: podinfod
