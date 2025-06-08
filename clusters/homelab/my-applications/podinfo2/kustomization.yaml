@@ -2,11 +2,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
   name: podinfo
-  namespace: my-applications
-namespace: my-applications
-namePrefix: podinfo2-
+  namespace: podinfo2
+namespace: podinfo2
 resources:
   - hpa.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml
+  - namespace.yaml
