@@ -30,7 +30,7 @@ spec:
         otlphttp:
           endpoint: "http://loki.observability.svc.cluster.local:3100/otlp"
         prometheus:
-          endpoint: "0.0.0.0:8889"
+          endpoint: "http://prometheus.observability.svc.cluster.local:8889"
           resource_to_telemetry_conversion:
             enabled: true
       service:
