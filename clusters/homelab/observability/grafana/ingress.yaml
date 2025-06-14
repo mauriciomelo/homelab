@@ -1,8 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: podinfo
-  namespace: observability
+  name: grafana
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
 spec:
