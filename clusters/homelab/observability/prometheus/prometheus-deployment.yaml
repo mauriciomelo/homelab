@@ -24,8 +24,13 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /etc/prometheus
+            - name: prometheus-data
+              mountPath: /prometheus
       volumes:
         - name: config-volume
           configMap:
             name: prometheus-server-conf
             defaultMode: 420
+        - name: prometheus-data
+          persistentVolumeClaim:
+            claimName: prometheus-data-pvc
