@@ -29,8 +29,10 @@ spec:
       exporters:
         otlphttp:
           endpoint: "http://loki.observability.svc.cluster.local:3100/otlp"
-        prometheus:
-          endpoint: "0.0.0.0:8889"
+        prometheusremotewrite:
+          endpoint: "http://prometheus.observability.svc.cluster.local:9090/api/v1/write"
+          tls:
+            insecure: true
           resource_to_telemetry_conversion:
             enabled: true
       service:
@@ -44,12 +46,10 @@ spec:
             receivers:
               - otlp
           metrics:
-            # receivers: [kubeletstats]  # Already enabled via kubeletMetrics preset
-            # processors: [batch, memory_limiter]
-            exporters: [prometheus]
+            exporters: [prometheusremotewrite]
     ports:
       prometheus:
-        enabled: true
+        enabled: false
         containerPort: 8889
         servicePort: 8889
         hostPort: 8889
