@@ -7,6 +7,6 @@ spec:
   limits:
     - type: Container
       max:
-        ephemeral-storage: "1Gi"
+        ephemeral-storage: "4Gi"
       default:
-        ephemeral-storage: "1Gi"
+        ephemeral-storage: "4Gi"
