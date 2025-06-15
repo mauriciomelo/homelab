@@ -9,10 +9,10 @@ data:
       scrape_interval: 15s
       evaluation_interval: 15s
     # No need to scrape otel collector, metrics will be pushed via remote_write
-    scrape_configs:
-      - job_name: 'prometheus'
-        static_configs:
-          - targets: ['localhost:9090']
+    # scrape_configs:
+    #   - job_name: 'prometheus'
+    #     static_configs:
+    #       - targets: ['localhost:9090']
     storage:
       tsdb:
         out_of_order_time_window: 10m
