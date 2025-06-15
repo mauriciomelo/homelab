@@ -16,5 +16,5 @@ data:
     storage:
       tsdb:
         out_of_order_time_window: 10m
-    remote_write:
-      - url: http://prometheus.observability.svc.cluster.local:9090/api/v1/write
+    # remote_write:
+    #   - url: http://prometheus.observability.svc.cluster.local:9090/api/v1/write
