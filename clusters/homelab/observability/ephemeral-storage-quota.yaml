@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ResourceQuota
-metadata:
-  name: ephemeral-storage-quota
-  namespace: observability
-spec:
-  hard:
-    requests.ephemeral-storage: "7Gi"
-    limits.ephemeral-storage: "10Gi"
