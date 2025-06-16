@@ -5,6 +5,7 @@ configMapGenerator:
   - name: grafana-dashboards
     files:
       - dashboards/cluster.json
+      - dashboards/app.json
   - name: grafana-dashboard-provider
     files:
       - dashboard-provider.yaml
