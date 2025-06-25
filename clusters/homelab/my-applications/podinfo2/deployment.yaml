@@ -48,7 +48,7 @@ spec:
             - name: PODINFO_UI_COLOR
               value: green
             - name: PODINFO_UI_MESSAGE
-              value: hey you!!
+              value: " "
           livenessProbe:
             exec:
               command:
