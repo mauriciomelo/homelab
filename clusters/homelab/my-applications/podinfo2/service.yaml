@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: podinfo
+  name: podinfo2
 spec:
   type: ClusterIP
   selector:
-    app: podinfo
+    app: podinfo2
   ports:
     - name: http
       port: 9898
