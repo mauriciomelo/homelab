@@ -6,7 +6,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
 spec:
   rules:
-    - host: podinfo2.home.mauriciomelo.io
+    - host: podinfo2.local
       http:
         paths:
           - path: /
