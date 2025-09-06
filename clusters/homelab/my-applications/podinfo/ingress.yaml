@@ -4,6 +4,7 @@ metadata:
   name: podinfo
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
 spec:
   rules:
     - host: podinfo.home.mauriciomelo.io
@@ -16,3 +17,6 @@ spec:
                 name: podinfo
                 port:
                   number: 9898
+  tls:
+    - hosts:
+        - "podinfo.home.mauriciomelo.io"
