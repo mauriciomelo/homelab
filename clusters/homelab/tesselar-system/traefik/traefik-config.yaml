@@ -3,6 +3,8 @@ kind: HelmChartConfig
 metadata:
   name: traefik
   namespace: kube-system
+  annotations:
+    reconcile.fluxcd.io/requestedAt: "2025-09-06T20:00:00Z" # Dummy timestamp to trigger reconciliation
 spec:
   valuesContent: |-
     additionalArguments:
