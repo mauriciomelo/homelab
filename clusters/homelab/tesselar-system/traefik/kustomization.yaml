@@ -5,3 +5,4 @@ resources:
   - tailscale-coredns-conf.yaml
   - tailscale-pvc.yaml
   - tailscale-serve-config.yaml
+  - traefik-letsencrypt-data-pvc.yaml
