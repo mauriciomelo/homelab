@@ -4,3 +4,4 @@ resources:
   - traefik-config.yaml
   - tailscale-coredns-conf.yaml
   - tailscale-pvc.yaml
+  - tailscale-serve-config.yaml

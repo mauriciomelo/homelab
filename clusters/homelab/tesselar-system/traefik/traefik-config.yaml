@@ -25,6 +25,12 @@ spec:
         - name: tailscale-state
           persistentVolumeClaim:
             claimName: tailscale-state
+        - name: tailscale-serve-config-volume
+          configMap:
+            name: tailscale-serve-config
+            items:
+              - key: serve.json
+                path: serve.json
       # 2. Define the sidecar containers to inject into the Traefik pod
       additionalContainers:
         # --- CONTAINER 2: THE TAILSCALE SIDECAR ---
@@ -33,6 +39,9 @@ spec:
           volumeMounts:
             - name: tailscale-state
               mountPath: /var/lib
+            - name: tailscale-serve-config-volume
+              mountPath: /etc/tailscale
+              readOnly: true
           envFrom:
             # Pulls the TS_AUTHKEY from the Secret in Step 1
             - secretRef:
@@ -47,10 +56,12 @@ spec:
             # Run in userspace mode (no kernel privileges)
             - name: TS_USERSPACE_MODE
               value: "true"
+            - name: TS_SERVE_CONFIG
+              value: "/etc/tailscale/serve.json"
             
             # Proxy web ports (TCP) and DNS ports (TCP/UDP) to localhost
             - name: TS_PROXIED_TCP
-              value: "80,443,53"
+              value: "80,443,53,8443,8000"
             - name: TS_PROXIED_UDP
               value: "53"
             
