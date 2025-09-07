@@ -12,6 +12,55 @@ spec:
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
       # - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" # uncomment for testing
       - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
+    deployment:
+      # 1. Define the volumes we need to mount into our sidecars
+      additionalVolumes:
+        - name: coredns-config-volume
+          configMap:
+            # This name must match the ConfigMap from Step 2
+            name: tailscale-coredns-conf 
+            items:
+              - key: Corefile
+                path: Corefile
+      # 2. Define the sidecar containers to inject into the Traefik pod
+      additionalContainers:
+        # --- CONTAINER 2: THE TAILSCALE SIDECAR ---
+        - name: tailscale-sidecar
+          image: tailscale/tailscale:latest
+          envFrom:
+            # Pulls the TS_AUTHKEY from the Secret in Step 1
+            - secretRef:
+                name: traefik-tailscale-auth
+          env:
+            # This gives the pod its stable MagicDNS name (e.g., "k3s-proxy.my-name.ts.net")
+            # This MUST match the hostname you used in the Corefile (Step 2)
+            - name: TS_HOSTNAME
+              value: "tesselar-proxy"
+            
+            # Run in userspace mode (no kernel privileges)
+            - name: TS_USERSPACE_MODE
+              value: "true"
+            
+            # Proxy web ports (TCP) and DNS ports (TCP/UDP) to localhost
+            - name: TS_PROXIED_TCP
+              value: "80,443,53"
+            - name: TS_PROXIED_UDP
+              value: "53"
+            
+            # Disable state storage; rely on the ephemeral/reusable key
+            - name: TS_KUBE_SECRET
+              value: ""
+            - name: TS_ACCEPT_DNS
+              value: "false"
+        # --- CONTAINER 3: THE DNS FORWARDER SIDECAR ---
+        - name: dns-forwarder
+          image: coredns/coredns:1.11.1
+          args: [ "-conf", "/etc/coredns/Corefile" ]
+          volumeMounts:
+            # Mount the config volume defined above
+            - name: coredns-config-volume
+              mountPath: /etc/coredns
+              readOnly: true
     ports:
       websecure:
         tls:
