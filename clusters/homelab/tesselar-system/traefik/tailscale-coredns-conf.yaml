@@ -13,15 +13,5 @@ data:
         # pointing it to your pod's stable Tailscale MagicDNS name.
         hosts {
           tesselar-proxy.tail15a315.ts.net   *.home.mauriciomelo.io
-          fallthrough
         }
-    }
-
-    # BLOCK 2: Handle all other DNS queries
-    .:53 {
-        log
-        errors
-        cache 30
-        # Forward everything else (google.com, etc.) to the main K3s DNS
-        forward . 10.43.0.10
     }
