@@ -5,13 +5,22 @@ metadata:
   namespace: kube-system
 data:
   Corefile: |
-    # BLOCK 1: Handle your custom domain home.mauriciomelo.io
     home.mauriciomelo.io:53 {
         log
         errors
-        # This creates a CNAME for any *.home.mauriciomelo.io query,
-        # pointing it to your pod's stable Tailscale MagicDNS name.
-        hosts {
-          tesselar-proxy.tail15a315.ts.net   *.home.mauriciomelo.io
+
+        # Always return a CNAME record for any query under home.mauriciomelo.io
+        template IN CNAME . {
+            match ^(.*)\.home\.mauriciomelo\.io\.$
+            answer "{{ .Name }} 60 IN CNAME tesselar-proxy.tail15a315.ts.net."
+        }
+
+        # Do not forward/resolve tesselar-proxy.tail15a315.ts.net itself
+        # Just return NXDOMAIN if someone queries it here
+        template IN A tesselar-proxy.tail15a315.ts.net {
+            rcode NXDOMAIN
+        }
+        template IN AAAA tesselar-proxy.tail15a315.ts.net {
+            rcode NXDOMAIN
         }
     }

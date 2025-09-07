@@ -22,11 +22,18 @@ spec:
             items:
               - key: Corefile
                 path: Corefile
+        - name: tailscale-state
+          hostPath:
+            path: /var/lib/traefik-tailscale
+            type: DirectoryOrCreate
       # 2. Define the sidecar containers to inject into the Traefik pod
       additionalContainers:
         # --- CONTAINER 2: THE TAILSCALE SIDECAR ---
         - name: tailscale-sidecar
           image: tailscale/tailscale:latest
+          volumeMounts:
+            - name: tailscale-state
+              mountPath: /var/lib/tailscale
           envFrom:
             # Pulls the TS_AUTHKEY from the Secret in Step 1
             - secretRef:
