@@ -7,9 +7,11 @@ data:
   serve.json: |
     {
       "TCP": {
+        "80": {
+          "TCPForward": "127.0.0.1:8000"
+        },
         "443": {
-          "HTTPS": true,
-          "Proxy": "http://127.0.0.1:8443"
+          "TCPForward": "127.0.0.1:8443"
         }
       }
     }
