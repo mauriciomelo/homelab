@@ -23,9 +23,8 @@ spec:
               - key: Corefile
                 path: Corefile
         - name: tailscale-state
-          hostPath:
-            path: /var/lib/traefik-tailscale
-            type: DirectoryOrCreate
+          persistentVolumeClaim:
+            claimName: tailscale-state
       # 2. Define the sidecar containers to inject into the Traefik pod
       additionalContainers:
         # --- CONTAINER 2: THE TAILSCALE SIDECAR ---
@@ -33,7 +32,7 @@ spec:
           image: tailscale/tailscale:latest
           volumeMounts:
             - name: tailscale-state
-              mountPath: /var/lib/tailscale
+              mountPath: /var/lib
           envFrom:
             # Pulls the TS_AUTHKEY from the Secret in Step 1
             - secretRef:
@@ -43,7 +42,8 @@ spec:
             # This MUST match the hostname you used in the Corefile (Step 2)
             - name: TS_HOSTNAME
               value: "tesselar-proxy"
-            
+            - name: TS_STATE_DIR
+              value: "/var/lib/tailscale"
             # Run in userspace mode (no kernel privileges)
             - name: TS_USERSPACE_MODE
               value: "true"
