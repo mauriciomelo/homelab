@@ -6,21 +6,14 @@ metadata:
 data:
   Corefile: |
     home.mauriciomelo.io:53 {
-        log
-        errors
+      log
+      errors
 
-        # Always return a CNAME record for any query under home.mauriciomelo.io
-        template IN CNAME . {
-            match ^(.*)\.home\.mauriciomelo\.io\.$
-            answer "{{ .Name }} 60 IN CNAME tesselar-proxy.tail15a315.ts.net."
-        }
+      template IN A *.home.mauriciomelo.io {
+          answer "{{ .Name }} 60 IN A 100.110.184.68"
+      }
 
-        # Do not forward/resolve tesselar-proxy.tail15a315.ts.net itself
-        # Just return NXDOMAIN if someone queries it here
-        template IN A tesselar-proxy.tail15a315.ts.net {
-            rcode NXDOMAIN
-        }
-        template IN AAAA tesselar-proxy.tail15a315.ts.net {
-            rcode NXDOMAIN
-        }
+      template IN A home.mauriciomelo.io {
+          answer "{{ .Name }} 60 IN A 100.110.184.68"
+      }
     }
