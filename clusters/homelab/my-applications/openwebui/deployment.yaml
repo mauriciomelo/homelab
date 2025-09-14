@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openwebui
+spec:
+  minReadySeconds: 3
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 60
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: openwebui
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9797"
+      labels:
+        app: openwebui
+        app-type: user
+    spec:
+      containers:
+        - name: openwebui
+          image: ghcr.io/open-webui/open-webui:main
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 300
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+            requests:
+              cpu: 100m
+              memory: 64Mi
