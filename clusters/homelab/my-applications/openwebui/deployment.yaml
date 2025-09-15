@@ -3,13 +3,12 @@ kind: Deployment
 metadata:
   name: openwebui
 spec:
+  replicas: 1
   minReadySeconds: 3
   revisionHistoryLimit: 5
   progressDeadlineSeconds: 60
   strategy:
-    rollingUpdate:
-      maxUnavailable: 0
-    type: RollingUpdate
+    type: Recreate
   selector:
     matchLabels:
       app: openwebui
@@ -50,6 +49,9 @@ spec:
             periodSeconds: 5
             successThreshold: 1
             failureThreshold: 300
+          volumeMounts:
+            - name: openwebui-data
+              mountPath: /app/backend/data
           resources:
             limits:
               cpu: 2000m
@@ -57,3 +59,7 @@ spec:
             requests:
               cpu: 100m
               memory: 64Mi
+      volumes:
+        - name: openwebui-data
+          persistentVolumeClaim:
+            claimName: openwebui-data-pvc
