@@ -49,6 +49,31 @@ spec:
             periodSeconds: 5
             successThreshold: 1
             failureThreshold: 300
+          env:
+            - name: OAUTH_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: openwebui-oauth
+                  key: client-id
+            - name: OAUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: openwebui-oauth
+                  key: client-secret
+            - name: OAUTH_PROVIDER_NAME
+              value: "authentik"
+            - name: OPENID_PROVIDER_URL
+              value: "https://authentik.home.mauriciomelo.io/application/o/openwebui/.well-known/openid-configuration"
+            - name: OPENID_REDIRECT_URI
+              value: "https://openwebui.home.mauriciomelo.io/oauth/oidc/callback"
+            - name: WEBUI_URL
+              value: "https://openwebui.home.mauriciomelo.io"
+            - name: ENABLE_OAUTH_SIGNUP
+              value: "true"
+            - name: ENABLE_LOGIN_FORM
+              value: "false"
+            - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
+              value: "true"
           volumeMounts:
             - name: openwebui-data
               mountPath: /app/backend/data
