@@ -1,0 +1,57 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authentik
+  namespace: authentik
+spec:
+  chart:
+    spec:
+      chart: authentik
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: authentik
+  interval: 5m0s
+  targetNamespace: authentik
+  valuesFrom:
+    - kind: Secret
+      name: authentik-secret-key
+      valuesKey: secret_key
+      targetPath: authentik.secret_key
+    - kind: Secret
+      name: authentik-postgres-app
+      valuesKey: host
+      targetPath: authentik.postgresql.host
+    - kind: Secret
+      name: authentik-postgres-app
+      valuesKey: port
+      targetPath: authentik.postgresql.port
+    - kind: Secret
+      name: authentik-postgres-app
+      valuesKey: user
+      targetPath: authentik.postgresql.user
+    - kind: Secret
+      name: authentik-postgres-app
+      valuesKey: password
+      targetPath: authentik.postgresql.password
+    - kind: Secret
+      name: authentik-postgres-app
+      valuesKey: dbname
+      targetPath: authentik.postgresql.name
+  values:
+    authentik:
+      error_reporting:
+        enabled: true
+    server:
+      ingress:
+        ingressClassName: traefik
+        enabled: true
+        hosts:
+          - authentik.home.mauriciomelo.io
+        annotations:
+          traefik.ingress.kubernetes.ioio/router.entrypoints: web,websecure
+    postgresql:
+      enabled: false
+    redis:
+      enabled: true
