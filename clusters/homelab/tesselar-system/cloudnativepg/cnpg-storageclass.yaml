@@ -1,0 +1,30 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: cnpg-longhorn-local
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+provisioner: driver.longhorn.io
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+# WaitForFirstConsumer: This tells Kubernetes to wait. Don't create the volume until a pod is scheduled that claims this PVC.
+# This allows the scheduler to pick a node for the pod, and then it tells Longhorn to create the volume,
+# ensuring it follows the dataLocality: "strict-local" rule.
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+  # Set replica count to 1 to avoid write amplification
+  # CloudNativePG provides resiliency through multiple instances
+  numberOfReplicas: "1"
+
+  # Enable strict-local data locality. This provides the best possible I/O performance.
+  # Ensures pod and data volume are on the same node.
+  dataLocality: "strict-local"
+
+  fsType: "ext4"
+
+  # Set stale replica timeout to handle node failures gracefully
+  staleReplicaTimeout: "30"
+
+  # Disable frontend (for better performance with databases)
+  frontend: "blockdev"

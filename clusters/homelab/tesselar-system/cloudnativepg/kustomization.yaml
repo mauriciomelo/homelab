@@ -7,3 +7,4 @@ resources:
   - cnpg-release.yaml
   - cnpg-repository.yaml
   - namespace.yaml
+  - cnpg-storageclass.yaml
