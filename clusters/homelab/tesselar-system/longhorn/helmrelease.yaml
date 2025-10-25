@@ -13,4 +13,7 @@ spec:
         kind: HelmRepository
         name: longhorn-repo
       version: v1.9.1
+  values:
+    defaultSettings:
+      storageMinimalAvailablePercentage: 15
   interval: 1m0s
