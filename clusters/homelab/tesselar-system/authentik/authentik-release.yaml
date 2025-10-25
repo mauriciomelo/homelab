@@ -54,4 +54,9 @@ spec:
     postgresql:
       enabled: false
     redis:
-      enabled: false
+      enabled: true
+      master:
+        persistence:
+          enabled: true
+          storageClass: "longhorn"
+          size: 512Mi
