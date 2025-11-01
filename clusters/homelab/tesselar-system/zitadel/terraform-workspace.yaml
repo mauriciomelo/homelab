@@ -1,0 +1,23 @@
+---
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: zitadel-apps3
+  namespace: flux-system
+spec:
+  approvePlan: auto
+  interval: 10m
+  path: ./clusters/homelab/tesselar-system/zitadel/terraform
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  varsFrom:
+    - kind: Secret
+      name: terraform-zitadel-credentials
+  writeOutputsToSecret:
+    name: zitadel-terraform-outputs
+  runnerPodTemplate:
+    spec:
+      env:
+        - name: ZITADEL_DOMAIN
+          value: "zitadel.home.mauriciomelo.io"

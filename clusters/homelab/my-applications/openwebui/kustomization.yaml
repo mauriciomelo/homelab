@@ -4,8 +4,8 @@ metadata:
   name: openwebui
 namespace: openwebui
 resources:
-  - deployment.yaml
-  - service.yaml
-  - ingress.yaml
   - namespace.yaml
-  - pvc.yaml
+  # - deployment.yaml
+  # - service.yaml
+  # - ingress.yaml
+  # - pvc.yaml

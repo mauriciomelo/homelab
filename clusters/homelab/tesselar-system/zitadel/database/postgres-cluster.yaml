@@ -1,0 +1,13 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: zitadel-postgres
+  namespace: zitadel
+spec:
+  enableSuperuserAccess: true
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.6-minimal-trixie
+  instances: 3
+  storage:
+    size: 1Gi
+    storageClass: cnpg-longhorn-local

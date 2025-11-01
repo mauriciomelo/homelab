@@ -17,9 +17,9 @@ parameters:
   # CloudNativePG provides resiliency through multiple instances
   numberOfReplicas: "1"
 
-  # Enable strict-local data locality. This provides the best possible I/O performance.
-  # Ensures pod and data volume are on the same node.
-  dataLocality: "strict-local"
+  # Enable best-effort data locality. This provides a balance between I/O performance and flexibility.
+  # It attempts to keep the pod and data volume on the same node but allows them to be on different nodes if necessary.
+  dataLocality: "best-effort"
 
   fsType: "ext4"
 

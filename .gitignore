@@ -1,0 +1,3 @@
+# Cluster-only secrets (manually applied, not committed)
+*.secret.yaml
+*.secret.yml

@@ -1,0 +1,128 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: zitadel
+  namespace: zitadel
+spec:
+  interval: 1m
+  valuesFrom:
+    - kind: Secret
+      name: zitadel-admin-credentials
+      valuesKey: masterkey
+      targetPath: zitadel.masterkey
+    - kind: Secret
+      name: zitadel-admin-credentials
+      valuesKey: username
+      targetPath: zitadel.configmapConfig.FirstInstance.Org.Human.UserName
+    - kind: Secret
+      name: zitadel-admin-credentials
+      valuesKey: password
+      targetPath: zitadel.configmapConfig.FirstInstance.Org.Human.Password
+    - kind: Secret
+      name: zitadel-postgres-app
+      valuesKey: host
+      targetPath: zitadel.configmapConfig.Database.Postgres.Host
+    - kind: Secret
+      name: zitadel-postgres-app
+      valuesKey: port
+      targetPath: zitadel.configmapConfig.Database.Postgres.Port
+    - kind: Secret
+      name: zitadel-postgres-app
+      valuesKey: dbname
+      targetPath: zitadel.configmapConfig.Database.Postgres.Database
+    - kind: Secret
+      name: zitadel-postgres-app
+      valuesKey: username
+      targetPath: zitadel.configmapConfig.Database.Postgres.User.Username
+    - kind: Secret
+      name: zitadel-postgres-app
+      valuesKey: password
+      targetPath: zitadel.configmapConfig.Database.Postgres.User.Password
+    - kind: Secret
+      name: zitadel-postgres-superuser
+      valuesKey: username
+      targetPath: zitadel.configmapConfig.Database.Postgres.Admin.Username
+    - kind: Secret
+      name: zitadel-postgres-superuser
+      valuesKey: password
+      targetPath: zitadel.configmapConfig.Database.Postgres.Admin.Password
+  chart:
+    spec:
+      chart: zitadel
+      version: "9.12.2"
+      sourceRef:
+        kind: HelmRepository
+        name: zitadel
+        namespace: zitadel
+      interval: 12h
+  values:
+    replicaCount: 1
+
+    zitadel:
+      # Master key now referenced from secret via valuesFrom above
+      # Bootstrap configuration
+      configmapConfig:
+        # External domain configuration
+        ExternalDomain: "zitadel.home.mauriciomelo.io"
+        ExternalPort: 443
+        TLS:
+          Enabled: false
+
+        # Database configuration
+        Database:
+          Postgres:
+            # Host, Port, and Database injected from CNPG secret via valuesFrom
+            MaxOpenConns: 20
+            MaxIdleConns: 10
+            MaxConnLifetime: 30m
+            MaxConnIdleTime: 5m
+            User:
+              # Username injected from CNPG secret via valuesFrom
+              SSL:
+                Mode: disable
+
+        # First instance bootstrap
+        FirstInstance:
+          Org:
+            Name: "Tesselar"
+            Human:
+              # Username and password injected from secret via valuesFrom
+              FirstName: "Admin"
+              LastName: "User"
+              Email:
+                Address: "admin@tesselar.io"
+              # Terraform service account
+            # Machine:
+            #   Users:
+            #     - Username: "terraform-sa"
+            #       Name: "Terraform Service Account"
+            #       AccessTokenType: "jwt"
+            #       MachineKey:
+            #         Type: "json"
+            #         ExpirationDate: "2099-12-31T23:59:59Z"
+          DefaultInstance:
+            OrgName: "Tesselar"
+
+    ingress:
+      enabled: true
+      className: "traefik"
+      annotations:
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+        traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+      hosts:
+        - host: zitadel.home.mauriciomelo.io
+          paths:
+            - path: /
+              pathType: Prefix
+    login:
+      ingress:
+        enabled: true
+
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
