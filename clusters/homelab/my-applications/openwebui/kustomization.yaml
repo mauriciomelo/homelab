@@ -5,6 +5,7 @@ metadata:
 namespace: openwebui
 resources:
   - namespace.yaml
+  - auth-claim.yaml
   # - deployment.yaml
   # - service.yaml
   # - ingress.yaml

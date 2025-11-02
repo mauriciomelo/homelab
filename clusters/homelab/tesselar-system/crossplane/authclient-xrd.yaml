@@ -1,0 +1,37 @@
+apiVersion: apiextensions.crossplane.io/v2
+kind: CompositeResourceDefinition
+metadata:
+  name: authclients.tesselar.io
+spec:
+  group: tesselar.io
+  names:
+    kind: AuthClient
+    plural: authclients
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                applicationName:
+                  type: string
+                  description: "The name of the OIDC application."
+                redirectUris:
+                  type: array
+                  items:
+                    type: string
+                  description: "A list of redirect URIs for the OIDC application."
+                postLogoutRedirectUris:
+                  type: array
+                  items:
+                    type: string
+                  description: "A list of post-logout redirect URIs for the OIDC application."
+              required:
+                - applicationName
+                - redirectUris
+                - postLogoutRedirectUris

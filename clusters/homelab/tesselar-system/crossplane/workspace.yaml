@@ -1,0 +1,99 @@
+apiVersion: opentofu.upbound.io/v1beta1
+kind: Workspace
+metadata:
+  name: openwebui-oicd
+  namespace: crossplane-system
+spec:
+  providerConfigRef:
+    name: zitadel-tf-provider-config
+  forProvider:
+    # For simple cases you can use an inline source to specify the content of
+    # main.tf as opaque, inline HCL.
+    source: Inline
+    module: |
+      locals {
+        org_name     = "org1"
+        project_name = "project1"
+        org_exists = length(data.zitadel_orgs.by_name.ids) > 0
+        project_exists = local.org_exists ? length(data.zitadel_projects.by_name[0].project_ids) > 0 : false
+      }
+
+      data "zitadel_orgs" "by_name" {
+        name        = local.org_name
+        name_method = "TEXT_QUERY_METHOD_EQUALS"
+      }
+
+      # Create org if it does not exist
+
+      resource "zitadel_org" "default" {
+        # Use the new local for clarity
+        count = local.org_exists ? 0 : 1
+        name  = local.org_name
+      }
+
+      locals {
+        org_id = coalesce(try(zitadel_org.default[0].id, null), try(data.zitadel_orgs.by_name.ids[0], null))
+      }
+
+
+      data "zitadel_projects" "by_name" {
+        count = local.org_exists ? 1 : 0
+        org_id      = data.zitadel_orgs.by_name.ids[0]
+        name        = local.project_name
+        name_method = "TEXT_QUERY_METHOD_EQUALS"
+      }
+
+
+      # Create project if it does not exist
+
+      resource "zitadel_project" "default" {
+        count = local.project_exists ? 0 : 1
+        name                     = local.project_name
+        org_id                   = local.org_id 
+        project_role_assertion   = true
+        project_role_check       = true
+        has_project_check        = true
+        private_labeling_setting = "PRIVATE_LABELING_SETTING_ENFORCE_PROJECT_RESOURCE_OWNER_POLICY"
+      }
+
+
+      locals {
+        project_id = coalesce(
+          try(zitadel_project.default[0].id, null), 
+          try(data.zitadel_projects.by_name[0].project_ids[0], null)
+        )
+      }
+
+
+      resource "zitadel_application_oidc" "default" {
+        org_id                      = local.org_id
+        project_id                  = local.project_id
+        name                        = "OpenWebUI"
+        redirect_uris               = ["https://openwebui.home.mauriciomelo.io/oauth/oidc/callback"]
+        post_logout_redirect_uris   = ["https://openwebui.home.mauriciomelo.io"]
+        response_types              = ["OIDC_RESPONSE_TYPE_CODE"]
+        grant_types                 = ["OIDC_GRANT_TYPE_AUTHORIZATION_CODE"]
+      }
+
+
+      output "client_secret" {
+        value       = zitadel_application_oidc.default.client_secret
+        sensitive   = true
+      }
+
+      output "client_id" {
+        value       = zitadel_application_oidc.default.client_id
+        sensitive   = true
+      }
+
+      output "org_id" {
+        value       = local.org_id
+      }
+
+      output "project_id" {
+        value = local.project_id
+      }
+
+  writeConnectionSecretToRef:
+    namespace: openwebui
+    name: openwebui-oicd

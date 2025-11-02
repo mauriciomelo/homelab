@@ -1,0 +1,34 @@
+apiVersion: opentofu.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: zitadel-tf-provider-config
+spec:
+  credentials:
+    - filename: iam-admin.json
+      secretRef:
+        key: iam-admin.json
+        name: iam-admin
+        namespace: zitadel
+      source: Secret
+  configuration: |
+    terraform {
+      required_providers {
+        zitadel = {
+          source  = "zitadel/zitadel"
+          version = "~> 1.0"
+        }
+      }
+
+      backend "kubernetes" {
+        secret_suffix     = "zitadel-tf-state"
+        namespace         = "crossplane-system"
+        in_cluster_config = true
+      }
+    }
+
+    provider "zitadel" {
+      domain           = "zitadel.home.mauriciomelo.io"
+      insecure         = false
+      port             = "443"
+      jwt_profile_file = "iam-admin.json"
+    }
