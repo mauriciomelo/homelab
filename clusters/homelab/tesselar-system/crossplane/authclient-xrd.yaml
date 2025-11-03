@@ -3,6 +3,8 @@ kind: CompositeResourceDefinition
 metadata:
   name: authclients.tesselar.io
 spec:
+  enforcedCompositionRef:
+    name: zitadel-tf-composition
   group: tesselar.io
   names:
     kind: AuthClient

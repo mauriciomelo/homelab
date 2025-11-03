@@ -11,5 +11,5 @@ resources:
   - opentofu-crossplane-provider.yaml
   - zitadel-tf-provider-config.yaml
   # - workspace.yaml
-  - authclient-xrd.yaml
   - zitadel-oidc-composition.yaml
+  - authclient-xrd.yaml

@@ -1,7 +1,7 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: zitadel-oidc
+  name: zitadel-tf-composition
 spec:
   compositeTypeRef:
     apiVersion: tesselar.io/v1alpha1
