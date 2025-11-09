@@ -1,10 +1,10 @@
 apiVersion: tesselar.io/v1alpha1
-kind: AuthClient
+kind: xAuthClient
 metadata:
-  name: openwebui-auth
+  name: openwebui6
   namespace: openwebui
 spec:
-  applicationName: openwebui
+  applicationName: openwebui6
   redirectUris:
     - "https://openwebui.example.com/oauth/callback"
   postLogoutRedirectUris:

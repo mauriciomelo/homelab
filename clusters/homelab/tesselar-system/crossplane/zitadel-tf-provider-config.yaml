@@ -1,5 +1,5 @@
-apiVersion: opentofu.upbound.io/v1beta1
-kind: ProviderConfig
+apiVersion: opentofu.m.upbound.io/v1beta1
+kind: ClusterProviderConfig
 metadata:
   name: zitadel-tf-provider-config
 spec:

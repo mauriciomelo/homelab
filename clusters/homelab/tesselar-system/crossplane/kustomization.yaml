@@ -9,6 +9,7 @@ resources:
   - helmrepo.yaml
   - helmrelease.yaml
   - opentofu-crossplane-provider.yaml
+  - patch-and-transform-function.yaml
   - zitadel-tf-provider-config.yaml
   # - workspace.yaml
   - zitadel-oidc-composition.yaml

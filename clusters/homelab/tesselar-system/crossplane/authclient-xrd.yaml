@@ -1,14 +1,16 @@
 apiVersion: apiextensions.crossplane.io/v2
 kind: CompositeResourceDefinition
 metadata:
-  name: authclients.tesselar.io
+  name: xauthclients.tesselar.io
 spec:
-  enforcedCompositionRef:
+  defaultCompositionRef:
     name: zitadel-tf-composition
   group: tesselar.io
+  scope: Cluster
   names:
-    kind: AuthClient
-    plural: authclients
+    kind: xAuthClient
+    plural: xauthclients
+
   versions:
     - name: v1alpha1
       served: true
