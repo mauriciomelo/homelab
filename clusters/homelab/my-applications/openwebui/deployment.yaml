@@ -53,17 +53,17 @@ spec:
             - name: OAUTH_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: openwebui-oauth
+                  name: openwebui-auth-client
                   key: client-id
             - name: OAUTH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: openwebui-oauth
+                  name: openwebui-auth-client
                   key: client-secret
             - name: OAUTH_PROVIDER_NAME
-              value: "authentik"
+              value: "tesselar"
             - name: OPENID_PROVIDER_URL
-              value: "https://authentik.home.mauriciomelo.io/application/o/openwebui/.well-known/openid-configuration"
+              value: "https://zitadel.home.mauriciomelo.io/.well-known/openid-configuration"
             - name: OPENID_REDIRECT_URI
               value: "https://openwebui.home.mauriciomelo.io/oauth/oidc/callback"
             - name: WEBUI_URL
