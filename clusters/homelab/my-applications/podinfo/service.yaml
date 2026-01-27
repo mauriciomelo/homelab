@@ -7,10 +7,10 @@ spec:
   selector:
     app: podinfo
   ports:
-    - name: http
+    - name: web
       port: 9898
       protocol: TCP
-      targetPort: http
+      targetPort: web
     - port: 9999
       targetPort: grpc
       protocol: TCP

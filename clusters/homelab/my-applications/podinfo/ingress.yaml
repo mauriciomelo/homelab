@@ -6,17 +6,16 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
     traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
 spec:
+  # Notice: No host, no rules array, and no TLS hosts required!
   rules:
-    - host: podinfo.home.mauriciomelo.io
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: podinfo
-                port:
-                  number: 9898
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: podinfo
+            port:
+              name: http
   tls:
-    - hosts:
-        - "podinfo.home.mauriciomelo.io"
+  - {} # This tells Traefik to enable TLS using the defaultRule host

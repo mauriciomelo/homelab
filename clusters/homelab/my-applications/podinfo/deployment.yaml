@@ -27,7 +27,7 @@ spec:
           image: ghcr.io/stefanprodan/podinfo:6.9.0
           imagePullPolicy: IfNotPresent
           ports:
-            - name: http
+            - name: web
               containerPort: 9898
               protocol: TCP
             - name: http-metrics
