@@ -13,5 +13,3 @@ spec:
                 name: podinfo
                 port:
                   name: web
-  tls:
-    - {} # This tells Traefik to enable TLS using the defaultRule host
