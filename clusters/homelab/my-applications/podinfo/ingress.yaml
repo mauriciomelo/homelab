@@ -8,14 +8,14 @@ metadata:
 spec:
   # Notice: No host, no rules array, and no TLS hosts required!
   rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: podinfo
-            port:
-              name: http
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: podinfo
+                port:
+                  name: web
   tls:
-  - {} # This tells Traefik to enable TLS using the defaultRule host
+    - {} # This tells Traefik to enable TLS using the defaultRule host
