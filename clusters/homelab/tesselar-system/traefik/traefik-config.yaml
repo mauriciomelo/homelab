@@ -5,9 +5,6 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
-    providers:
-      kubernetesIngress:
-        defaultRule: "Host(`{{ .Name }}.home.mauriciomelo.io`)"
     additionalArguments:
       - "--certificatesresolvers.letsencrypt.acme.email=mauricioltw@gmail.com"
       - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"

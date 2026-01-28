@@ -5,7 +5,8 @@ metadata:
   annotations: {}
 spec:
   rules:
-    - http:
+    - host: openwebui.${DOMAIN}
+      http:
         paths:
           - path: /
             pathType: Prefix

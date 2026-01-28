@@ -22,6 +22,9 @@ spec:
   interval: 10m0s
   path: ./clusters/homelab
   prune: true
+  postBuild:
+    substitute:
+      DOMAIN: home.mauriciomelo.io
   sourceRef:
     kind: GitRepository
     name: flux-system
