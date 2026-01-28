@@ -5,8 +5,8 @@ metadata:
 namespace: openwebui
 resources:
   - namespace.yaml
-  - auth-client.yaml
+  - openwebui-auth-client.authclient.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml
-  - pvc.yaml
+  - openwebui-data-pvc.persistentvolumeclaim.yaml

@@ -7,7 +7,7 @@ spec:
   selector:
     app: openwebui
   ports:
-    - name: http
+    - name: web
       port: 8080
       protocol: TCP
-      targetPort: http
+      targetPort: web

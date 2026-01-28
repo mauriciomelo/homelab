@@ -7,9 +7,7 @@ spec:
   revisionHistoryLimit: 5
   progressDeadlineSeconds: 60
   strategy:
-    rollingUpdate:
-      maxUnavailable: 0
-    type: RollingUpdate
+    type: Recreate
   selector:
     matchLabels:
       app: podinfo
@@ -51,21 +49,15 @@ spec:
             - name: PODINFO_UI_MESSAGE
               value: Hello!
           livenessProbe:
-            exec:
-              command:
-                - podcli
-                - check
-                - http
-                - localhost:9898/healthz
+            httpGet:
+              path: /healthz
+              port: web
             initialDelaySeconds: 5
             timeoutSeconds: 5
           readinessProbe:
-            exec:
-              command:
-                - podcli
-                - check
-                - http
-                - localhost:9898/readyz
+            httpGet:
+              path: /readyz
+              port: web
             initialDelaySeconds: 5
             timeoutSeconds: 5
           resources:

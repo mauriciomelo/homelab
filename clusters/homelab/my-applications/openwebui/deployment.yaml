@@ -26,13 +26,13 @@ spec:
           image: ghcr.io/open-webui/open-webui:main
           imagePullPolicy: IfNotPresent
           ports:
-            - name: http
+            - name: web
               containerPort: 8080
               protocol: TCP
           readinessProbe:
             httpGet:
               path: /
-              port: 8080
+              port: web
               scheme: HTTP
             initialDelaySeconds: 5
             timeoutSeconds: 2
@@ -42,7 +42,7 @@ spec:
           startupProbe:
             httpGet:
               path: /
-              port: 8080
+              port: web
               scheme: HTTP
             initialDelaySeconds: 5
             timeoutSeconds: 2
