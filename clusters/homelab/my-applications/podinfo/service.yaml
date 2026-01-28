@@ -11,7 +11,11 @@ spec:
       port: 9898
       protocol: TCP
       targetPort: web
-    - port: 9999
-      targetPort: grpc
+    - name: http-metrics
+      port: 9797
       protocol: TCP
-      name: grpc
+      targetPort: http-metrics
+    - name: grpc
+      port: 9999
+      protocol: TCP
+      targetPort: grpc

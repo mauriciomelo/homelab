@@ -4,8 +4,7 @@ metadata:
   name: podinfo
 namespace: podinfo
 resources:
-  - hpa.yaml
+  - namespace.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml
-  - namespace.yaml
