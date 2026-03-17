@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tesselar-system-config
+  namespace: tesselar-system
+data:
+  domain: home.mauriciomelo.io
