@@ -4,4 +4,4 @@ metadata:
   name: openwebui-auth-client
 spec:
   redirectUris:
-    - "https://openwebui.home.mauriciomelo.io/oauth/oidc/callback"
+    - https://openwebui.home.mauriciomelo.io/oauth/oidc/callback

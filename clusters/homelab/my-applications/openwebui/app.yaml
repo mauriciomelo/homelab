@@ -1,0 +1,51 @@
+apiVersion: tesselar.io/v1alpha1
+kind: App
+metadata:
+  name: openwebui
+  annotations:
+    kustomize.toolkit.fluxcd.io/ssa: Ignore
+spec:
+  image: ghcr.io/open-webui/open-webui:main
+  ports:
+    - name: web
+      containerPort: 8080
+  envVariables:
+    - name: OAUTH_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: openwebui-auth-client
+          key: client-id
+    - name: OAUTH_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: openwebui-auth-client
+          key: client-secret
+    - name: OAUTH_PROVIDER_NAME
+      value: tesselar
+    - name: OPENID_PROVIDER_URL
+      value: https://zitadel.home.mauriciomelo.io/.well-known/openid-configuration
+    - name: OPENID_REDIRECT_URI
+      value: https://openwebui.home.mauriciomelo.io/oauth/oidc/callback
+    - name: WEBUI_URL
+      value: https://openwebui.home.mauriciomelo.io
+    - name: ENABLE_OAUTH_SIGNUP
+      value: "true"
+    - name: ENABLE_LOGIN_FORM
+      value: "false"
+    - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
+      value: "true"
+  volumeMounts:
+    - mountPath: /app/backend/data
+      name: openwebui-data-pvc
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+  ingress:
+    port:
+      name: web
+  health:
+    check:
+      type: httpGet
+      path: /
+      port: web

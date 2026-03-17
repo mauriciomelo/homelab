@@ -36,7 +36,7 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 5
             timeoutSeconds: 2
-            periodSeconds: 5
+            periodSeconds: 10
             successThreshold: 1
             failureThreshold: 3
           startupProbe:
@@ -48,7 +48,7 @@ spec:
             timeoutSeconds: 2
             periodSeconds: 5
             successThreshold: 1
-            failureThreshold: 300
+            failureThreshold: 60
           env:
             - name: OAUTH_CLIENT_ID
               valueFrom:
@@ -61,13 +61,13 @@ spec:
                   name: openwebui-auth-client
                   key: client-secret
             - name: OAUTH_PROVIDER_NAME
-              value: "tesselar"
+              value: tesselar
             - name: OPENID_PROVIDER_URL
-              value: "https://zitadel.home.mauriciomelo.io/.well-known/openid-configuration"
+              value: https://zitadel.home.mauriciomelo.io/.well-known/openid-configuration
             - name: OPENID_REDIRECT_URI
-              value: "https://openwebui.home.mauriciomelo.io/oauth/oidc/callback"
+              value: https://openwebui.home.mauriciomelo.io/oauth/oidc/callback
             - name: WEBUI_URL
-              value: "https://openwebui.home.mauriciomelo.io"
+              value: https://openwebui.home.mauriciomelo.io
             - name: ENABLE_OAUTH_SIGNUP
               value: "true"
             - name: ENABLE_LOGIN_FORM
@@ -75,7 +75,7 @@ spec:
             - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
               value: "true"
           volumeMounts:
-            - name: openwebui-data
+            - name: openwebui-data-pvc
               mountPath: /app/backend/data
           resources:
             limits:
@@ -84,7 +84,15 @@ spec:
             requests:
               cpu: 100m
               memory: 64Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: web
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
       volumes:
-        - name: openwebui-data
+        - name: openwebui-data-pvc
           persistentVolumeClaim:
             claimName: openwebui-data-pvc
