@@ -6,6 +6,3 @@ namespace: podinfo
 resources:
   - app.yaml
   - namespace.yaml
-  - deployment.yaml
-  - service.yaml
-  - ingress.yaml
