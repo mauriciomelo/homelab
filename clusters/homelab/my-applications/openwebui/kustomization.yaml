@@ -6,8 +6,5 @@ namespace: openwebui
 resources:
   - app.yaml
   - namespace.yaml
-  - deployment.yaml
-  - service.yaml
-  - ingress.yaml
   - openwebui-auth-client.authclient.yaml
   - openwebui-data-pvc.persistentvolumeclaim.yaml
