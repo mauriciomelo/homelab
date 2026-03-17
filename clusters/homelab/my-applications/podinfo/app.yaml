@@ -13,7 +13,7 @@ spec:
       containerPort: 9999
   envVariables:
     - name: PODINFO_UI_COLOR
-      value: magenta
+      value: green
     - name: PODINFO_UI_MESSAGE
       value: Hello!
   volumeMounts: []
