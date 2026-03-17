@@ -45,7 +45,7 @@ spec:
             - --random-error=false
           env:
             - name: PODINFO_UI_COLOR
-              value: blue
+              value: magenta
             - name: PODINFO_UI_MESSAGE
               value: Hello!
           livenessProbe:
