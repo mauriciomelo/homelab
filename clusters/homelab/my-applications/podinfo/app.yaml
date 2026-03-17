@@ -1,0 +1,33 @@
+apiVersion: tesselar.io/v1alpha1
+kind: App
+metadata:
+  name: podinfo
+  annotations:
+    kustomize.toolkit.fluxcd.io/ssa: Ignore
+spec:
+  image: ghcr.io/stefanprodan/podinfo:6.9.0
+  ports:
+    - name: web
+      containerPort: 9898
+    - name: http-metrics
+      containerPort: 9797
+    - name: grpc
+      containerPort: 9999
+  envVariables:
+    - name: PODINFO_UI_COLOR
+      value: blue
+    - name: PODINFO_UI_MESSAGE
+      value: Hello!
+  volumeMounts: []
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  ingress:
+    port:
+      name: web
+  health:
+    check:
+      type: httpGet
+      path: /healthz
+      port: web
