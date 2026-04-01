@@ -9,5 +9,5 @@ spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:17.6-minimal-trixie
   instances: 3
   storage:
-    size: 2Gi
+    size: 5Gi
     storageClass: cnpg-longhorn-local
