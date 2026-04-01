@@ -4,6 +4,7 @@ metadata:
   name: tailscale-proxy-state
   namespace: kube-system
 spec:
+  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:
