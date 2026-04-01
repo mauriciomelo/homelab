@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tailscale-proxy
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tailscale-proxy
+  template:
+    metadata:
+      labels:
+        app: tailscale-proxy
+    spec:
+      containers:
+        - name: tailscale
+          image: tailscale/tailscale:latest
+          envFrom:
+            - secretRef:
+                name: traefik-tailscale-auth
+          env:
+            - name: TS_HOSTNAME
+              value: tesselar-proxy
+            - name: TS_AUTH_ONCE
+              value: "true"
+            - name: TS_STATE_DIR
+              value: /var/lib/tailscale
+            - name: TS_KUBE_SECRET
+              value: ""
+            - name: TS_USERSPACE
+              value: "true"
+            - name: TS_SERVE_CONFIG
+              value: /etc/tailscale/serve.json
+            - name: TS_ACCEPT_DNS
+              value: "false"
+            - name: TS_ENABLE_HEALTH_CHECK
+              value: "true"
+            - name: TS_LOCAL_ADDR_PORT
+              value: 0.0.0.0:9002
+          ports:
+            - name: health
+              containerPort: 9002
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: health
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: health
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            - name: tailscale-state
+              mountPath: /var/lib/tailscale
+            - name: tailscale-serve-config
+              mountPath: /etc/tailscale
+              readOnly: true
+        - name: haproxy
+          image: haproxy:3.1-alpine
+          args:
+            - -W
+            - -db
+            - -f
+            - /usr/local/etc/haproxy/haproxy.cfg
+          readinessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          volumeMounts:
+            - name: haproxy-config
+              mountPath: /usr/local/etc/haproxy
+              readOnly: true
+      volumes:
+        - name: tailscale-state
+          persistentVolumeClaim:
+            claimName: tailscale-proxy-state
+        - name: tailscale-serve-config
+          configMap:
+            name: tailscale-proxy-serve-config
+        - name: haproxy-config
+          configMap:
+            name: tailscale-proxy-haproxy-config

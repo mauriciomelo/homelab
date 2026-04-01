@@ -1,3 +1,6 @@
 # Cluster-only secrets (manually applied, not committed)
 *.secret.yaml
 *.secret.yml
+
+# Local app drafts
+clusters/*/my-applications/.drafts/

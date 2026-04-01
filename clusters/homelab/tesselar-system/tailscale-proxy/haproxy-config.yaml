@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tailscale-proxy-haproxy-config
+  namespace: kube-system
+data:
+  haproxy.cfg: |
+    global
+      log stdout format raw local0
+
+    defaults
+      log global
+      timeout connect 5s
+      timeout client 1m
+      timeout server 1m
+
+    frontend traefik_http
+      bind *:8000
+      mode tcp
+      default_backend traefik_http
+
+    backend traefik_http
+      mode tcp
+      server traefik traefik.kube-system.svc.cluster.local:80 check
+
+    frontend traefik_https
+      bind *:8443
+      mode tcp
+      default_backend traefik_https
+
+    backend traefik_https
+      mode tcp
+      server traefik traefik.kube-system.svc.cluster.local:443 check

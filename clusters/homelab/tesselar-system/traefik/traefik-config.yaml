@@ -20,59 +20,6 @@ spec:
         - name: letsencrypt-data
           persistentVolumeClaim:
             claimName: traefik-letsencrypt-data
-        - name: coredns-config-volume
-          configMap:
-            name: tailscale-coredns-conf 
-            items:
-              - key: Corefile
-                path: Corefile
-        - name: tailscale-state
-          persistentVolumeClaim:
-            claimName: tailscale-state
-        - name: tailscale-serve-config-volume
-          configMap:
-            name: tailscale-serve-config
-            items:
-              - key: serve.json
-                path: serve.json
-      additionalContainers:
-        # --- CONTAINER 2: THE TAILSCALE SIDECAR ---
-        - name: tailscale-sidecar
-          image: tailscale/tailscale:latest
-          volumeMounts:
-            - name: tailscale-state
-              mountPath: /var/lib
-            - name: tailscale-serve-config-volume
-              mountPath: /etc/tailscale
-              readOnly: true
-          envFrom:
-            - secretRef:
-                name: traefik-tailscale-auth
-          env:
-            - name: TS_HOSTNAME
-              value: "tesselar-proxy"
-            - name: TS_STATE_DIR
-              value: "/var/lib/tailscale"
-            - name: TS_USERSPACE_MODE
-              value: "true"
-            - name: TS_SERVE_CONFIG
-              value: "/etc/tailscale/serve.json"
-            - name: TS_PROXIED_TCP
-              value: "80,443,53,8443,8000"
-            - name: TS_PROXIED_UDP
-              value: "53"
-            - name: TS_KUBE_SECRET
-              value: ""
-            - name: TS_ACCEPT_DNS
-              value: "false"
-        # --- CONTAINER 3: THE DNS FORWARDER SIDECAR ---
-        - name: dns-forwarder
-          image: coredns/coredns:1.11.1
-          args: [ "-conf", "/etc/coredns/Corefile" ]
-          volumeMounts:
-            - name: coredns-config-volume
-              mountPath: /etc/coredns
-              readOnly: true
     ports:
       websecure:
         tls:
