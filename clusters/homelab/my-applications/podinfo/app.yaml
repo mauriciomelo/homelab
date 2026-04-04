@@ -10,6 +10,11 @@ spec:
   envVariables:
     - name: PODINFO_UI_COLOR
       value: "#2f855a"
+    - name: PODINFO_UI_MESSAGE
+      value: Welcome to the homelab greenhouse - calm pods, healthy probes, and good
+        vibes only.
+    - name: PODINFO_UI_LOGO
+      value: https://cdn.simpleicons.org/kubernetes/2f855a
   volumeMounts: []
   resources:
     limits:
