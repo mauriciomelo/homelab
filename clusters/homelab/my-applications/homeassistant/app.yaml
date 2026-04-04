@@ -1,0 +1,27 @@
+apiVersion: tesselar.io/v1alpha1
+kind: App
+metadata:
+  name: homeassistant
+spec:
+  image: ghcr.io/home-assistant/home-assistant:stable
+  ports:
+    - name: http
+      containerPort: 8123
+  envVariables:
+    - name: TZ
+      value: Etc/UTC
+  volumeMounts:
+    - mountPath: /config
+      name: homeassistant-config-pvc
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+  ingress:
+    port:
+      name: http
+  health:
+    check:
+      type: httpGet
+      path: /
+      port: http
