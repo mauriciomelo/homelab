@@ -15,8 +15,8 @@ spec:
       name: homeassistant-config-pvc
   resources:
     limits:
-      cpu: 2000m
-      memory: 2Gi
+      cpu: 500m
+      memory: 512Mi
   ingress:
     port:
       name: http
