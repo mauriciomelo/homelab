@@ -1,0 +1,23 @@
+apiVersion: tesselar.io/v1alpha1
+kind: App
+metadata:
+  name: podinfo
+spec:
+  image: ghcr.io/stefanprodan/podinfo:6.11.2
+  ports:
+    - name: http
+      containerPort: 9898
+  envVariables: []
+  volumeMounts: []
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  ingress:
+    port:
+      name: http
+  health:
+    check:
+      type: httpGet
+      path: /readyz
+      port: http
