@@ -7,7 +7,9 @@ spec:
   ports:
     - name: http
       containerPort: 9898
-  envVariables: []
+  envVariables:
+    - name: PODINFO_UI_COLOR
+      value: "#2f855a"
   volumeMounts: []
   resources:
     limits:
