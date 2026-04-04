@@ -7,7 +7,7 @@ metadata:
     storageclass.kubernetes.io/is-default-class: "false"
 provisioner: driver.longhorn.io
 allowVolumeExpansion: true
-reclaimPolicy: Delete
+reclaimPolicy: Retain
 # WaitForFirstConsumer: This tells Kubernetes to wait. Don't create the volume until a pod is scheduled that claims this PVC.
 # This allows the scheduler to pick a node for the pod, and then it tells Longhorn to create the volume,
 # ensuring it follows the dataLocality: "strict-local" rule.
