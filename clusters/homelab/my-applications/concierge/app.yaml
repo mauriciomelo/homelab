@@ -25,3 +25,9 @@ spec:
       type: httpGet
       path: /healthz
       port: web
+  overrides:
+    deploymentJsonPatches:
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          fsGroup: 1000
