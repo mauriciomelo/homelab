@@ -28,29 +28,6 @@ spec:
   overrides:
     deploymentJsonPatches:
       - op: add
-        path: /spec/template/spec/initContainers
-        value:
-          - name: fix-bind
-            image: ghcr.io/openclaw/openclaw:2026.4.14
-            command:
-              - /bin/sh
-              - -c
-              - |
-                python3 -c "
-                import json, os
-                cfg = '/home/node/.openclaw/openclaw.json'
-                if os.path.exists(cfg):
-                    with open(cfg) as f:
-                        c = json.load(f)
-                    c.setdefault('gateway', {})
-                    c['gateway']['bind'] = 'lan'
-                    with open(cfg, 'w') as f:
-                        json.dump(c, f, indent=2)
-                "
-            volumeMounts:
-              - name: data
-                mountPath: /home/node/.openclaw
-      - op: add
         path: /spec/template/spec/securityContext
         value:
           fsGroup: 1000
