@@ -1,0 +1,27 @@
+apiVersion: tesselar.io/v1alpha1
+kind: App
+metadata:
+  name: concierge
+spec:
+  image: ghcr.io/openclaw/openclaw:2026.4.14
+  ports:
+    - name: web
+      containerPort: 18789
+  envVariables:
+    - name: OPENCLAW_GATEWAY_BIND
+      value: lan
+  volumeMounts:
+    - mountPath: /home/node/.openclaw
+      name: data
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+  ingress:
+    port:
+      name: web
+  health:
+    check:
+      type: httpGet
+      path: /healthz
+      port: web
