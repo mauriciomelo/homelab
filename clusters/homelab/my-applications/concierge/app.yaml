@@ -9,7 +9,7 @@ spec:
       containerPort: 18789
   envVariables:
     - name: OPENCLAW_GATEWAY_BIND
-      value: lan
+      value: auto
   volumeMounts:
     - mountPath: /home/node/.openclaw
       name: data
