@@ -3,7 +3,7 @@ kind: App
 metadata:
   name: concierge
 spec:
-  image: ghcr.io/openclaw/openclaw:2026.4.14
+  image: ghcr.io/openclaw/openclaw:latest
   ports:
     - name: web
       containerPort: 18789
