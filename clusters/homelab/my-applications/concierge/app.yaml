@@ -15,7 +15,7 @@ spec:
       name: data
   resources:
     limits:
-      cpu: 1000m
+      cpu: "2"
       memory: 2Gi
   ingress:
     port:
