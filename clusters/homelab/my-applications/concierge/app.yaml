@@ -15,8 +15,8 @@ spec:
       name: data
   resources:
     limits:
-      cpu: "2"
-      memory: 2Gi
+      cpu: 500m
+      memory: 1Gi
   ingress:
     port:
       name: web
