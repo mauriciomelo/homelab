@@ -46,16 +46,14 @@ spec:
         path: /spec/template/spec/dnsPolicy
         value: ClusterFirstWithHostNet
       - op: add
-        path: /spec/template/spec/volumes
+        path: /spec/template/spec/volumes/-
         value:
-          - name: sync-data
-            nfs:
-              server: truenas.lan
-              path: /mnt/store/home-cluster/syncthing
+          name: sync-data
+          nfs:
+            server: truenas.lan
+            path: /mnt/store/home-cluster/syncthing
       - op: add
-        path: /spec/template/spec/containers/0/volumeMounts
+        path: /spec/template/spec/containers/0/volumeMounts/-
         value:
-          - name: data
-            mountPath: /var/syncthing
-          - name: sync-data
-            mountPath: /sync
+          name: sync-data
+          mountPath: /sync
