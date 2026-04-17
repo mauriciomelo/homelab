@@ -3,7 +3,7 @@ kind: App
 metadata:
   name: syncthing
 spec:
-  image: syncthing/syncthing:v2.0.16
+  image: syncthing/syncthing:2.0.16
   ports:
     - name: gui
       containerPort: 8384
