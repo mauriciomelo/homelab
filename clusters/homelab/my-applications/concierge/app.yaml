@@ -42,4 +42,4 @@ spec:
         path: /spec/template/spec/containers/0/volumeMounts/-
         value:
           name: workspace-data
-          mountPath: /home/node/.openclaw/workspace
+          mountPath: /home/node/.openclaw/workspace/shared-vault
