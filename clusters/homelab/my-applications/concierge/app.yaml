@@ -31,3 +31,15 @@ spec:
         path: /spec/template/spec/securityContext
         value:
           fsGroup: 1000
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: workspace-data
+          nfs:
+            server: truenas.lan
+            path: /mnt/store/home-cluster/syncthing/shared-vault
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts/-
+        value:
+          name: workspace-data
+          mountPath: /home/node/.openclaw/workspace
