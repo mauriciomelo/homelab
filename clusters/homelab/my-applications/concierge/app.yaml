@@ -14,6 +14,9 @@ spec:
     - mountPath: /home/node/.openclaw
       name: data
   resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
     limits:
       cpu: 500m
       memory: 2Gi

@@ -17,6 +17,9 @@ spec:
       value: https://cdn.simpleicons.org/kubernetes/2f855a
   volumeMounts: []
   resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
     limits:
       cpu: 250m
       memory: 256Mi

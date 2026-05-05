@@ -36,6 +36,9 @@ spec:
     - mountPath: /app/backend/data
       name: openwebui-data-pvc
   resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
     limits:
       cpu: 2000m
       memory: 1Gi
