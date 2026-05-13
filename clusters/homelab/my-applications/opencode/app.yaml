@@ -3,7 +3,7 @@ kind: App
 metadata:
   name: opencode
 spec:
-  image: ghcr.io/mauriciomelo/opencode-web:sha256-e44d488427e7b7f2024f2ba82380f67f9d2249f27ad219cbe48e2eff867892bb
+  image: ghcr.io/mauriciomelo/opencode-web
   ports:
     - name: http
       containerPort: 8080
