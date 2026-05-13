@@ -1,0 +1,48 @@
+apiVersion: tesselar.io/v1alpha1
+kind: App
+metadata:
+  name: opencode
+spec:
+  image: ghcr.io/mauriciomelo/opencode-web:sha256-e44d488427e7b7f2024f2ba82380f67f9d2249f27ad219cbe48e2eff867892bb
+  ports:
+    - name: http
+      containerPort: 8080
+  envVariables: []
+  volumeMounts:
+    - mountPath: /home/node/.config/opencode
+      name: config
+    - mountPath: /home/node/.local/share/opencode
+      name: state
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  ingress:
+    port:
+      name: http
+  health:
+    check:
+      type: httpGet
+      path: /
+      port: http
+  overrides:
+    deploymentJsonPatches:
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          fsGroup: 1000
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: shared-vault
+          nfs:
+            server: truenas.lan
+            path: /mnt/store/home-cluster/syncthing/shared-vault
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts/-
+        value:
+          name: shared-vault
+          mountPath: /home/node/workspace/shared-vault
