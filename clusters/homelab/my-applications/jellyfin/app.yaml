@@ -9,9 +9,9 @@ spec:
       containerPort: 8096
   envVariables:
     - name: PUID
-      value: "3000"
+      value: "1000"
     - name: PGID
-      value: "3000"
+      value: "1000"
     - name: TZ
       value: Etc/UTC
   volumeMounts:
