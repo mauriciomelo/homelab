@@ -1,0 +1,64 @@
+apiVersion: tesselar.io/v1alpha1
+kind: App
+metadata:
+  name: jellyfin
+spec:
+  image: lscr.io/linuxserver/jellyfin:latest
+  ports:
+    - name: http
+      containerPort: 8096
+  envVariables:
+    - name: PUID
+      value: "1000"
+    - name: PGID
+      value: "1000"
+    - name: TZ
+      value: Etc/UTC
+  volumeMounts:
+    - mountPath: /config
+      name: config
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+  ingress:
+    port:
+      name: http
+  health:
+    check:
+      type: httpGet
+      path: /health
+      port: http
+  overrides:
+    deploymentJsonPatches:
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          fsGroup: 1000
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: tvshows
+          nfs:
+            server: truenas.lan
+            path: /mnt/store/media/tvshows
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts/-
+        value:
+          name: tvshows
+          mountPath: /data/tvshows
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: movies
+          nfs:
+            server: truenas.lan
+            path: /mnt/store/media/movies
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts/-
+        value:
+          name: movies
+          mountPath: /data/movies
