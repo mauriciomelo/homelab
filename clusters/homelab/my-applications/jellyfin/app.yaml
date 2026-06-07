@@ -62,3 +62,14 @@ spec:
         value:
           name: movies
           mountPath: /data/movies
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: transcodes
+          emptyDir:
+            sizeLimit: 10Gi
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts/-
+        value:
+          name: transcodes
+          mountPath: /config/cache/transcodes
