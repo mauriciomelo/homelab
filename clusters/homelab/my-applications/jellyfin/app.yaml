@@ -67,7 +67,7 @@ spec:
         value:
           name: transcodes
           emptyDir:
-            sizeLimit: 10Gi
+            sizeLimit: 13Gi
       - op: add
         path: /spec/template/spec/containers/0/volumeMounts/-
         value:
