@@ -43,7 +43,7 @@ spec:
         value:
           name: tvshows
           nfs:
-            server: truenas.lan
+            server: 10.10.10.45
             path: /mnt/store/media/tvshows
       - op: add
         path: /spec/template/spec/containers/0/volumeMounts/-
@@ -55,7 +55,7 @@ spec:
         value:
           name: tvshows-optimized
           nfs:
-            server: truenas.lan
+            server: 10.10.10.45
             path: /mnt/store/media/tvshows-optimized
       - op: add
         path: /spec/template/spec/containers/0/volumeMounts/-
@@ -67,7 +67,7 @@ spec:
         value:
           name: movies
           nfs:
-            server: truenas.lan
+            server: 10.10.10.45
             path: /mnt/store/media/movies
       - op: add
         path: /spec/template/spec/containers/0/volumeMounts/-
