@@ -1,0 +1,12 @@
+# Keep the k3s local-path class available for explicit use while Longhorn is default.
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-path
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+    # Preserve this k3s-provided class if it is removed from the Flux inventory.
+    kustomize.toolkit.fluxcd.io/prune: disabled
+provisioner: rancher.io/local-path
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer

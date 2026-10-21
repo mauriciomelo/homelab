@@ -14,6 +14,12 @@ spec:
         name: longhorn-repo
       version: v1.9.1
   values:
+    persistence:
+      defaultClass: true
+      defaultClassReplicaCount: 2
     defaultSettings:
+      defaultReplicaCount: 2
+      # Keep replicas on distinct nodes in this two-node cluster.
+      replicaSoftAntiAffinity: false
       storageMinimalAvailablePercentage: 15
   interval: 1m0s
