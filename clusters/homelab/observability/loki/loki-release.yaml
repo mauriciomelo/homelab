@@ -8,6 +8,7 @@ spec:
   chart:
     spec:
       chart: loki
+      version: 7.3.0
       sourceRef:
         kind: HelmRepository
         name: grafana
@@ -28,9 +29,14 @@ spec:
               period: 24h
       storage:
         type: "filesystem"
+      compactor:
+        working_directory: /var/loki/compactor
+        retention_enabled: true
+        delete_request_store: filesystem
       pattern_ingester:
         enabled: true
       limits_config:
+        retention_period: 720h
         allow_structured_metadata: true
         volume_enabled: true
       ruler:
@@ -44,8 +50,10 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        size: 2Gi
-        storageClassName: standard
+        size: 500Mi
+        storageClass: longhorn
+        whenDeleted: Retain
+        whenScaled: Retain
         accessModes:
           - ReadWriteOnce
 
@@ -61,8 +69,9 @@ spec:
       resources:
         limits:
     chunksCache:
-      # -- Amount of memory allocated to chunks-cache for object storage (in MB).
-      allocatedMemory: 150
+      enabled: false
+    resultsCache:
+      enabled: false
 
     ingester:
       replicas: 0
