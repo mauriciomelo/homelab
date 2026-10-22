@@ -48,6 +48,12 @@ spec:
 
     singleBinary:
       replicas: 1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 384Mi
+        limits:
+          memory: 1Gi
       persistence:
         enabled: true
         size: 500Mi
@@ -56,6 +62,28 @@ spec:
         whenScaled: Retain
         accessModes:
           - ReadWriteOnce
+
+    gateway:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          memory: 64Mi
+    lokiCanary:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          memory: 96Mi
+    sidecar:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+        limits:
+          memory: 256Mi
 
     # Zero out replica counts of other deployment modes
     backend:
