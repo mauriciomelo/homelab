@@ -5,6 +5,11 @@ metadata:
   namespace: observability
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: prometheus
@@ -13,6 +18,8 @@ spec:
       labels:
         app: prometheus
     spec:
+      securityContext:
+        fsGroup: 65534
       containers:
         - name: prometheus
           image: prom/prometheus
@@ -25,12 +32,20 @@ spec:
           args:
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--web.enable-remote-write-receiver"
+            - "--storage.tsdb.path=/prometheus/data"
+            - "--storage.tsdb.retention.time=15d"
+            - "--storage.tsdb.retention.size=1GB"
           ports:
             - containerPort: 9090
           volumeMounts:
+            - name: data-volume
+              mountPath: /prometheus
             - name: config-volume
               mountPath: /etc/prometheus
       volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: prometheus-data
         - name: config-volume
           configMap:
             name: prometheus-server-conf
