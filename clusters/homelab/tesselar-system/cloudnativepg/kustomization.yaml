@@ -8,3 +8,4 @@ resources:
   - cnpg-repository.yaml
   - namespace.yaml
   - cnpg-storageclass.yaml
+  - cnpg-local-storageclass.yaml
