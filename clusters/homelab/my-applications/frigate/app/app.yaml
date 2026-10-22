@@ -1,0 +1,128 @@
+---
+apiVersion: tesselar.io/v1alpha1
+kind: App
+metadata:
+  name: frigate
+spec:
+  image: ghcr.io/blakeblackshear/frigate@sha256:c4e02d2c511847eebbda8e0e370b41c78e7b51247353de79340e06c3e95f11be
+  ports:
+  - name: http
+    containerPort: 8971
+  - name: health
+    containerPort: 5000
+  - name: rtsp
+    containerPort: 8554
+  - name: webrtc-tcp
+    containerPort: 8555
+  envVariables: []
+  volumeMounts:
+  - name: config
+    mountPath: "/config"
+  resources:
+    requests:
+      cpu: 200m
+      memory: 1Gi
+    limits:
+      cpu: '4'
+      memory: 2Gi
+  ingress:
+    port:
+      name: http
+  health:
+    check:
+      type: httpGet
+      path: "/api/version"
+      port: health
+  overrides:
+    deploymentJsonPatches:
+    - op: add
+      path: "/spec/template/spec/initContainers"
+      value:
+      - name: verify-migrated-config
+        image: ghcr.io/blakeblackshear/frigate@sha256:c4e02d2c511847eebbda8e0e370b41c78e7b51247353de79340e06c3e95f11be
+        command:
+        - python3
+        - "-c"
+        - |
+          import pathlib
+          import sqlite3
+          config = pathlib.Path('/config/config.yaml')
+          database = pathlib.Path('/config/frigate.db')
+          if not config.is_file() or not database.is_file():
+              raise SystemExit('Migrated config.yaml and frigate.db are required')
+          connection = sqlite3.connect('file:/config/frigate.db?mode=ro', uri=True)
+          result = connection.execute('PRAGMA quick_check').fetchall()
+          connection.close()
+          if result != [('ok',)]:
+              raise SystemExit('Migrated database integrity check failed')
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            memory: 128Mi
+        volumeMounts:
+        - name: config
+          mountPath: "/config"
+    - op: add
+      path: "/spec/template/spec/containers/0/startupProbe"
+      value:
+        httpGet:
+          path: "/api/version"
+          port: health
+        periodSeconds: 5
+        timeoutSeconds: 3
+        failureThreshold: 60
+    - op: add
+      path: "/spec/template/spec/containers/0/readinessProbe"
+      value:
+        httpGet:
+          path: "/api/version"
+          port: health
+        periodSeconds: 10
+        timeoutSeconds: 3
+    - op: add
+      path: "/spec/template/spec/containers/0/livenessProbe"
+      value:
+        httpGet:
+          path: "/api/version"
+          port: health
+        periodSeconds: 20
+        timeoutSeconds: 5
+        failureThreshold: 6
+    - op: add
+      path: "/spec/template/spec/volumes/-"
+      value:
+        name: media
+        nfs:
+          server: 10.10.10.45
+          path: "/mnt/store/media/frigate"
+    - op: add
+      path: "/spec/template/spec/volumes/-"
+      value:
+        name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 256Mi
+    - op: add
+      path: "/spec/template/spec/volumes/-"
+      value:
+        name: cache
+        emptyDir:
+          medium: Memory
+          sizeLimit: 256Mi
+    - op: add
+      path: "/spec/template/spec/containers/0/volumeMounts/-"
+      value:
+        name: media
+        mountPath: "/media/frigate"
+    - op: add
+      path: "/spec/template/spec/containers/0/volumeMounts/-"
+      value:
+        name: shm
+        mountPath: "/dev/shm"
+    - op: add
+      path: "/spec/template/spec/containers/0/volumeMounts/-"
+      value:
+        name: cache
+        mountPath: "/tmp/cache"
