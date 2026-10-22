@@ -7,7 +7,11 @@ metadata:
 spec:
   enableSuperuserAccess: true
   imageName: ghcr.io/cloudnative-pg/postgresql:17.6-minimal-trixie
-  instances: 3
+  instances: 2
+  affinity:
+    enablePodAntiAffinity: true
+    podAntiAffinityType: required
+    topologyKey: kubernetes.io/hostname
   storage:
     size: 5Gi
     storageClass: cnpg-longhorn-local
