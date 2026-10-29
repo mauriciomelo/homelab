@@ -1,0 +1,61 @@
+apiVersion: tesselar.io/v1alpha1
+kind: App
+metadata:
+  name: forgejo
+spec:
+  image: codeberg.org/forgejo/forgejo:17.0.1@sha256:fcd19ff4ebc85fb098a67e8e1d0d5a84d07dd6e8a23edcfdfd5b71a6178953be
+  ports:
+    - name: http
+      containerPort: 3000
+  envVariables:
+    - name: USER_UID
+      value: "1000"
+    - name: USER_GID
+      value: "1000"
+    - name: FORGEJO__database__DB_TYPE
+      value: sqlite3
+    - name: FORGEJO__database__PATH
+      value: /data/gitea/forgejo.db
+    - name: FORGEJO__server__DOMAIN
+      value: forgejo.home.mauriciomelo.io
+    - name: FORGEJO__server__ROOT_URL
+      value: https://forgejo.home.mauriciomelo.io/
+    - name: FORGEJO__server__HTTP_PORT
+      value: "3000"
+    - name: FORGEJO__server__DISABLE_SSH
+      value: "true"
+    - name: FORGEJO__service__DISABLE_REGISTRATION
+      value: "true"
+    - name: FORGEJO__service__REQUIRE_SIGNIN_VIEW
+      value: "true"
+    - name: FORGEJO__actions__ENABLED
+      value: "false"
+  volumeMounts:
+    - name: data
+      mountPath: /data
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  ingress:
+    port:
+      name: http
+  health:
+    check:
+      type: httpGet
+      path: /
+      port: http
+  overrides:
+    deploymentJsonPatches:
+      - op: add
+        path: /spec/template/spec/containers/0/startupProbe
+        value:
+          httpGet:
+            path: /
+            port: http
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 60
