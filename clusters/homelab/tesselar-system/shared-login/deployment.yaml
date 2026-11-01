@@ -33,6 +33,7 @@ spec:
             - --email-domain=*
             - --upstream=static://202
             - --reverse-proxy=true
+            - --trusted-proxy-ip=10.42.0.0/16
             - --skip-provider-button=true
             - --whitelist-domain=.home.mauriciomelo.io
             - --cookie-name=__Secure-shared_login

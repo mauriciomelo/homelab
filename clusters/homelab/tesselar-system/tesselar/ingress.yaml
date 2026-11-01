@@ -4,6 +4,7 @@ metadata:
   name: tesselar
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: tesselar-system-shared-login@kubernetescrd
 spec:
   ingressClassName: traefik
   tls:
