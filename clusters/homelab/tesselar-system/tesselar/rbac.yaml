@@ -1,0 +1,78 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: tesselar
+rules:
+  - apiGroups: [""]
+    resources: [namespaces]
+    verbs: [get, create]
+  - apiGroups: [""]
+    resources: [nodes]
+    verbs: [list]
+  - apiGroups: [""]
+    resources: [pods]
+    verbs: [list, watch]
+  - apiGroups: [""]
+    resources: [services]
+    verbs: [get, create, update]
+  - apiGroups: [""]
+    resources: [persistentvolumeclaims]
+    verbs: [get, list, create, update]
+  - apiGroups: [""]
+    resources: [secrets]
+    verbs: [get, create, delete]
+  - apiGroups: [apps]
+    resources: [deployments]
+    verbs: [get, list, watch, create, update, patch]
+  - apiGroups: [networking.k8s.io]
+    resources: [ingresses]
+    verbs: [get, create, update]
+  - apiGroups: [tesselar.io]
+    resources: [apps, authclients]
+    verbs: [get, list, watch, create, update]
+  - apiGroups: [tesselar.io]
+    resources: [apps/status]
+    verbs: [update]
+  - apiGroups: [apiextensions.k8s.io]
+    resources: [customresourcedefinitions]
+    resourceNames: [apps.tesselar.io, authclients.tesselar.io]
+    verbs: [get, update]
+  - apiGroups: [apiextensions.k8s.io]
+    resources: [customresourcedefinitions]
+    verbs: [create]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tesselar
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tesselar
+subjects:
+  - kind: ServiceAccount
+    name: tesselar
+    namespace: tesselar-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: tesselar
+rules:
+  - apiGroups: [""]
+    resources: [configmaps]
+    resourceNames: [tesselar-system-config]
+    verbs: [get]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tesselar
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: tesselar
+subjects:
+  - kind: ServiceAccount
+    name: tesselar
+    namespace: tesselar-system
