@@ -2,6 +2,8 @@ apiVersion: tesselar.io/v1alpha1
 kind: App
 metadata:
   name: podinfo
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   image: ghcr.io/stefanprodan/podinfo:6.11.2
   ports:
