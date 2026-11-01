@@ -1,0 +1,8 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: shared-login
+spec:
+  forwardAuth:
+    address: http://shared-login.tesselar-system.svc.cluster.local:4180/
+    trustForwardHeader: false

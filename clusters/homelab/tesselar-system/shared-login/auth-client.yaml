@@ -1,0 +1,7 @@
+apiVersion: tesselar.io/v1
+kind: AuthClient
+metadata:
+  name: shared-login
+spec:
+  redirectUris:
+    - https://login.home.mauriciomelo.io/oauth2/callback
