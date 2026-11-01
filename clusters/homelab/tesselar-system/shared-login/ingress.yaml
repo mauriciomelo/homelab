@@ -10,6 +10,7 @@ spec:
     - hosts:
         - login.home.mauriciomelo.io
         - tesselar.home.mauriciomelo.io
+        - longhorn.home.mauriciomelo.io
   rules:
     - host: login.home.mauriciomelo.io
       http:
@@ -22,6 +23,16 @@ spec:
                 port:
                   name: http
     - host: tesselar.home.mauriciomelo.io
+      http:
+        paths:
+          - path: /oauth2/
+            pathType: Prefix
+            backend:
+              service:
+                name: shared-login
+                port:
+                  name: http
+    - host: longhorn.home.mauriciomelo.io
       http:
         paths:
           - path: /oauth2/

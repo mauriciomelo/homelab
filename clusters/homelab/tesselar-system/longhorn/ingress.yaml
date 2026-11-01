@@ -3,8 +3,13 @@ kind: Ingress
 metadata:
   name: longhorn
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: longhorn-system-shared-login@kubernetescrd
 spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - longhorn.home.mauriciomelo.io
   rules:
     - host: longhorn.home.mauriciomelo.io
       http:

@@ -8,4 +8,5 @@ resources:
   - helmrepo.yaml
   - namespace.yaml
   - ingress.yaml
+  - middleware.yaml
   - local-path-storageclass.yaml
