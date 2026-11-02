@@ -1,6 +1,8 @@
 apiVersion: tesselar.io/v1
 kind: AuthClient
 metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
   name: openwebui-auth-client
 spec:
   redirectUris:

@@ -1,6 +1,8 @@
 apiVersion: tesselar.io/v1alpha1
 kind: App
 metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
   name: openwebui
 spec:
   image: ghcr.io/open-webui/open-webui:main

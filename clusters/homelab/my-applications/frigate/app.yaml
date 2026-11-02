@@ -2,6 +2,8 @@
 apiVersion: tesselar.io/v1alpha1
 kind: App
 metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
   name: frigate
 spec:
   image: ghcr.io/blakeblackshear/frigate:0.18.2@sha256:fd60f99ffd4eb6c42360ed4e14953e270586f239309ab3983e55b2e97ffac09a
